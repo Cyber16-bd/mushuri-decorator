@@ -1,0 +1,300 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --color-primary: #0D3B66;
+  --color-primary-light: #1A5C96;
+  --color-accent: #D4860A;
+  --color-bg: #FDF8EF;
+  --color-surface: #FFFCF4;
+  --color-table-header: #0D3B66;
+  --color-row-even: #FFFCF4;
+  --color-row-odd: #F5EDD8;
+  --color-total-green: #E6F4E8;
+  --color-due-red: #FFEEEE;
+  --color-border: #0D3B66;
+}
+
+* {
+  font-family: 'Hind Siliguri', sans-serif;
+}
+
+body {
+  background-color: var(--color-bg);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+}
+
+/* Hide scrollbar but keep scroll functional on mobile webview */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light);
+  border-radius: 4px;
+}
+
+/* Bottom nav active indicator */
+.nav-btn {
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.nav-btn.active {
+  color: var(--color-primary);
+}
+.nav-btn.active .nav-icon-wrap {
+  background-color: rgba(13, 59, 102, 0.12);
+}
+.nav-icon-wrap {
+  transition: background-color 0.15s ease;
+  border-radius: 999px;
+  padding: 4px 18px;
+}
+
+/* Screen transition */
+.screen {
+  display: none;
+}
+.screen.active {
+  display: block;
+  animation: fadeSlideIn 0.18s ease;
+}
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Shop header box - traditional ledger look */
+.shop-header-box {
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-primary);
+}
+
+/* Bill table */
+.bill-table {
+  border: 1.5px solid var(--color-primary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.bill-table-head {
+  background-color: var(--color-table-header);
+}
+.bill-row:nth-child(even) {
+  background-color: var(--color-row-even);
+}
+.bill-row:nth-child(odd) {
+  background-color: var(--color-row-odd);
+}
+.bill-row {
+  border-bottom: 1px solid #D0C8B0;
+}
+.bill-row:last-child {
+  border-bottom: none;
+}
+
+/* Qty input inside table */
+.qty-input {
+  width: 100%;
+  text-align: center;
+  border: 1px solid #B0B0B0;
+  border-radius: 4px;
+  padding: 6px 4px;
+  background: #fff;
+  font-size: 13px;
+}
+.qty-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  border-width: 2px;
+}
+
+/* Totals row */
+.total-row-green { background-color: var(--color-total-green); }
+.total-row-red { background-color: var(--color-due-red); }
+
+/* Custom input style matching theme */
+.app-input {
+  background-color: var(--color-surface);
+  border: 1px solid #d8d0bc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
+  width: 100%;
+}
+.app-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  border-width: 2px;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 13px 18px;
+  transition: opacity 0.15s ease;
+}
+.btn-primary:active { opacity: 0.85; }
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: white;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 13px 18px;
+  transition: opacity 0.15s ease;
+}
+.btn-accent:active { opacity: 0.85; }
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 11px 16px;
+}
+
+/* Chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Card */
+.card {
+  background-color: var(--color-surface);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(13,59,102,0.10);
+}
+
+/* Bottom sheet */
+.bottom-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 50;
+  display: none;
+}
+.bottom-sheet-overlay.active {
+  display: block;
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+.bottom-sheet {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: var(--color-bg);
+  border-radius: 16px 16px 0 0;
+  max-height: 80vh;
+  z-index: 51;
+  transform: translateY(100%);
+  transition: transform 0.22s ease;
+  display: flex;
+  flex-direction: column;
+}
+.bottom-sheet.active {
+  transform: translateY(0);
+}
+
+/* Modal/dialog */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 60;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.active {
+  display: flex;
+  animation: fadeIn 0.15s ease;
+}
+.modal-box {
+  background: var(--color-bg);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 380px;
+  padding: 20px;
+}
+
+/* Drag handle for reorder */
+.drag-handle {
+  cursor: grab;
+  touch-action: none;
+}
+.product-item.dragging {
+  opacity: 0.4;
+}
+.product-item.drag-over {
+  border-top: 3px solid var(--color-primary);
+}
+
+/* Toast */
+#toast-container {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  pointer-events: none;
+}
+.toast {
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: toastIn 0.2s ease, toastOut 0.2s ease 2.3s forwards;
+}
+.toast.success { background-color: #2e7d32; }
+.toast.error { background-color: #c62828; }
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes toastOut {
+  from { opacity: 1; } to { opacity: 0; }
+}
+
+/* FAB */
+.fab {
+  position: fixed;
+  bottom: 84px;
+  right: 18px;
+  z-index: 40;
+  background-color: var(--color-accent);
+  color: white;
+  border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 13px 20px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Reorder info banner */
+.info-banner {
+  background-color: #E8F0FE;
+  border: 1px solid rgba(26,92,150,0.35);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--color-primary);
+  font-size: 13px;
+}
