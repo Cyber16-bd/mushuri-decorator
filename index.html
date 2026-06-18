@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>মুশুরীখোলা ডেকোরেটর</title>
+<meta name="theme-color" content="#0D3B66">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-screen">
+
+<div id="toast-container"></div>
+
+<!-- App shell -->
+<div class="max-w-md mx-auto bg-[#FDF8EF] min-h-screen relative pb-20">
+
+  <!-- ============ HOME SCREEN ============ -->
+  <section id="screen-home" class="screen active">
+    <div class="bg-[#0D3B66] text-white px-4 pt-7 pb-4">
+      <h1 class="text-xl font-bold" id="home-shop-name">মুশুরীখোলা ডেকোরেটর</h1>
+      <p class="text-sm text-white/80 mt-0.5" id="home-owner-name">প্রোঃ মো: আব্দুস সাত্তার</p>
+      <p class="text-sm text-white/80" id="home-phone">ফোন: 01322217130</p>
+    </div>
+
+    <div class="px-3 pt-3">
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="card p-3.5">
+          <svg class="w-6 h-6 text-[#0D3B66]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a4 4 0 014-4h4M9 17H7a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v3M9 17l3 3 3-3" /></svg>
+          <p class="text-lg font-bold text-[#0D3B66] mt-1.5" id="stat-total-bills">0টি</p>
+          <p class="text-xs text-black/55">মোট বিল</p>
+        </div>
+        <div class="card p-3.5" style="background-color:#E6F4E8;">
+          <svg class="w-6 h-6 text-green-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h1m4-12h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2z" /></svg>
+          <p class="text-lg font-bold text-green-800 mt-1.5" id="stat-total-revenue">৳0</p>
+          <p class="text-xs text-black/55">মোট আয়</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2.5 mt-2.5">
+        <div class="card p-3.5" style="background-color:#FFEEEE;">
+          <svg class="w-6 h-6 text-red-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-12.728 12.728M12 3v3m0 12v3m9-9h-3M6 12H3" /></svg>
+          <p class="text-lg font-bold text-red-700 mt-1.5" id="stat-total-due">৳0</p>
+          <p class="text-xs text-black/55">মোট বাকি</p>
+        </div>
+        <button onclick="openBillForm()" class="card p-3.5 text-left" style="background-color:#0D3B66;">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+          <p class="text-lg font-bold text-white mt-1.5">নতুন বিল</p>
+          <p class="text-xs text-white/70">তৈরি করুন</p>
+        </button>
+      </div>
+
+      <button onclick="openBillForm()" class="btn-accent w-full mt-4 flex items-center justify-center gap-2 text-base">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+        নতুন বিল তৈরি করুন
+      </button>
+
+      <div class="mt-5">
+        <h2 class="text-base font-bold text-[#0D3B66] mb-2">সাম্প্রতিক বিল</h2>
+        <div id="recent-bills-list" class="space-y-1.5"></div>
+        <p id="recent-bills-empty" class="text-center text-gray-400 text-sm py-6 hidden">কোনো বিল নেই</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BILL FORM SCREEN ============ -->
+  <section id="screen-billform" class="screen">
+    <div class="bg-[#0D3B66] text-white px-3 py-3 flex items-center justify-between sticky top-0 z-30">
+      <div class="flex items-center gap-2">
+        <button onclick="closeBillForm()" class="p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        </button>
+        <h2 class="font-bold text-base" id="billform-title">নতুন বিল</h2>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="printBillPdf()" title="প্রিন্ট"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z" /></svg></button>
+        <button onclick="sharePdf()" title="শেয়ার"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316M21 19a3 3 0 11-6 0 3 3 0 016 0zM9 12a3 3 0 11-6 0 3 3 0 016 0zM21 5a3 3 0 11-6 0 3 3 0 016 0z" /></svg></button>
+        <button onclick="saveBill()" title="সেভ"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-8H7v8M7 3v5h8M5 3h11l4 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" /></svg></button>
+      </div>
+    </div>
+
+    <div class="p-2.5">
+      <!-- Shop header (ledger style) -->
+      <div class="shop-header-box rounded p-2.5 text-center">
+        <p class="text-lg font-bold text-[#0D3B66]" id="bf-shop-name">মুশুরীখোলা ডেকোরেটর</p>
+        <p class="text-[13px] text-black/80" id="bf-owner-name">প্রোঃ মো: আব্দুস সাত্তার</p>
+        <p class="text-[12px] text-[#1A5C96] font-semibold" id="bf-phone">ফোন: 01322217130, 01404-349087</p>
+        <p class="text-[11px] text-black/55" id="bf-address">সুজানগর চৌমুহনী, বখশী মাজারের সামনে, ১৭ নং ওয়ার্ড, কুমিল্লা সিটি কর্পোরেশন।</p>
+      </div>
+
+      <!-- Customer info -->
+      <div class="mt-2.5 p-2.5 rounded border" style="background-color:var(--color-surface); border-color:#0D3B66;">
+        <div class="flex gap-2">
+          <div class="w-2/5">
+            <label class="text-xs text-[#0D3B66] font-semibold">বিল নং</label>
+            <input type="number" id="bf-bill-number" class="app-input mt-0.5" />
+          </div>
+          <div class="w-3/5">
+            <label class="text-xs text-[#0D3B66] font-semibold">তারিখ</label>
+            <input type="text" id="bf-date" class="app-input mt-0.5" />
+          </div>
+        </div>
+        <div class="mt-2.5">
+          <label class="text-xs text-[#0D3B66] font-semibold">নাম <span class="text-red-500">*</span></label>
+          <input type="text" id="bf-customer-name" class="app-input mt-0.5" placeholder="কাস্টমারের নাম" />
+        </div>
+        <div class="mt-2.5">
+          <label class="text-xs text-[#0D3B66] font-semibold">ঠিকানা</label>
+          <input type="text" id="bf-customer-address" class="app-input mt-0.5" placeholder="ঠিকানা (ঐচ্ছিক)" />
+        </div>
+      </div>
+
+      <!-- Product table -->
+      <div class="bill-table mt-2.5">
+        <div class="bill-table-head flex text-white text-[13px] font-bold">
+          <div class="py-2 px-1 text-center" style="flex:0.7;">নং</div>
+          <div class="py-2 px-1" style="flex:3;">বিবরণ</div>
+          <div class="py-2 px-1 text-center" style="flex:1.6;">পরিমাণ</div>
+          <div class="py-2 px-1 text-center" style="flex:1.4;">দর</div>
+          <div class="py-2 px-1 text-center" style="flex:1.6;">টাকা</div>
+          <div class="py-2 px-1 text-center" style="flex:0.8;"></div>
+        </div>
+        <div id="bf-rows-container"></div>
+        <p id="bf-rows-empty" class="text-center text-gray-400 text-sm py-5">নিচের বোতামে চাপুন পণ্য যোগ করতে</p>
+      </div>
+
+      <button onclick="openProductSheet()" class="btn-outline w-full mt-2 flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+        পণ্য যোগ করুন
+      </button>
+
+      <!-- Totals -->
+      <div class="mt-2.5 p-3 rounded border" style="background-color:var(--color-surface); border-color:#0D3B66;">
+        <div class="total-row-green flex justify-between items-center px-3.5 py-2.5 rounded">
+          <span class="font-bold text-[15px]">মোট</span>
+          <span class="font-bold text-[15px] text-[#0D3B66]" id="bf-grand-total">৳ 0</span>
+        </div>
+        <div class="flex justify-between items-center mt-2">
+          <span class="font-semibold text-[15px]">অগ্রিম</span>
+          <div class="w-32">
+            <input type="number" id="bf-advance" value="0" class="app-input text-right" style="padding:8px 10px;" />
+          </div>
+        </div>
+        <div class="total-row-red flex justify-between items-center px-3.5 py-2.5 rounded mt-2">
+          <span class="font-bold text-[15px]">বাকি</span>
+          <span class="font-bold text-[15px] text-[#0D3B66]" id="bf-due">৳ 0</span>
+        </div>
+      </div>
+
+      <div class="flex gap-2.5 mt-4">
+        <button onclick="saveBill()" class="btn-primary flex-1 flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-8H7v8M7 3v5h8M5 3h11l4 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" /></svg>
+          সেভ করুন
+        </button>
+        <button onclick="sharePdf()" class="btn-accent flex-1 flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316M21 19a3 3 0 11-6 0 3 3 0 016 0zM9 12a3 3 0 11-6 0 3 3 0 016 0zM21 5a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+          শেয়ার PDF
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BILL LIST SCREEN ============ -->
+  <section id="screen-billlist" class="screen">
+    <div class="bg-[#0D3B66] px-3 pt-4 pb-3 sticky top-0 z-30">
+      <h2 class="text-white font-bold text-lg mb-2.5">সকল বিল</h2>
+      <div class="relative">
+        <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-white/70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" /></svg>
+        <input type="text" id="bill-search-input" placeholder="নাম বা বিল নং দিয়ে খুঁজুন..." class="w-full rounded-lg pl-10 pr-3 py-2.5 text-sm text-white placeholder-white/60" style="background-color:#1A5C96; border:none;" oninput="renderBillList()" />
+      </div>
+    </div>
+    <div class="p-2.5">
+      <div id="bill-list-container" class="space-y-1.5"></div>
+      <div id="bill-list-empty" class="text-center text-gray-400 text-sm py-16 hidden">
+        <svg class="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+        <p class="mt-3">কোনো বিল পাওয়া যায়নি</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SETTINGS SCREEN ============ -->
+  <section id="screen-settings" class="screen">
+    <div class="bg-[#0D3B66] px-3 py-4 flex items-center justify-between sticky top-0 z-30">
+      <h2 class="text-white font-bold text-lg">পণ্য ব্যবস্থাপনা</h2>
+      <button onclick="openProductDialog()" class="text-white p-1">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+      </button>
+    </div>
+    <div class="p-2.5">
+      <div class="info-banner flex items-start gap-2 mb-2.5">
+        <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>দীর্ঘ চাপে ধরে টেনে পণ্যের ক্রম পরিবর্তন করুন।</span>
+      </div>
+      <div id="product-list-container" class="space-y-1.5"></div>
+    </div>
+    <button onclick="openProductDialog()" class="fab">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+    </button>
+  </section>
+
+  <!-- ============ BOTTOM NAVIGATION ============ -->
+  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-[#FFFCF4] border-t border-black/5 flex justify-around items-center py-2 z-40" style="box-shadow: 0 -2px 8px rgba(0,0,0,0.04);">
+    <button class="nav-btn active flex flex-col items-center gap-0.5 text-[11px] text-gray-500" data-nav="home" onclick="switchTab('home')">
+      <span class="nav-icon-wrap"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10M9 21h6" /></svg></span>
+      হোম
+    </button>
+    <button class="nav-btn flex flex-col items-center gap-0.5 text-[11px] text-gray-500" data-nav="billlist" onclick="switchTab('billlist')">
+      <span class="nav-icon-wrap"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></span>
+      বিল
+    </button>
+    <button class="nav-btn flex flex-col items-center gap-0.5 text-[11px] text-gray-500" data-nav="settings" onclick="switchTab('settings')">
+      <span class="nav-icon-wrap"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></span>
+      সেটিং
+    </button>
+  </nav>
+
+</div>
+
+<!-- ============ PRODUCT SELECTION BOTTOM SHEET ============ -->
+<div id="product-sheet-overlay" class="bottom-sheet-overlay" onclick="closeProductSheet()"></div>
+<div id="product-sheet" class="bottom-sheet">
+  <div class="flex justify-center pt-2"><div class="w-10 h-1 bg-gray-300 rounded-full"></div></div>
+  <div class="px-4 py-3 border-b border-black/10">
+    <h3 class="font-bold text-[17px] text-[#0D3B66]">পণ্য বেছে নিন</h3>
+  </div>
+  <div id="product-sheet-list" class="overflow-y-auto flex-1"></div>
+</div>
+
+<!-- ============ PRODUCT ADD/EDIT MODAL ============ -->
+<div id="product-modal-overlay" class="modal-overlay">
+  <div class="modal-box">
+    <h3 class="font-bold text-[17px] text-[#0D3B66] mb-3" id="product-modal-title">নতুন পণ্য যোগ</h3>
+    <input type="hidden" id="product-modal-id" />
+    <label class="text-xs text-[#0D3B66] font-semibold">পণ্যের নাম</label>
+    <input type="text" id="product-modal-name" class="app-input mt-1" />
+    <p class="text-red-500 text-xs mt-1 hidden" id="product-modal-name-error">নাম লিখুন</p>
+    <label class="text-xs text-[#0D3B66] font-semibold mt-3 block">দর (টাকা)</label>
+    <input type="number" id="product-modal-price" class="app-input mt-1" placeholder="0" />
+    <div class="flex gap-2 mt-4">
+      <button onclick="closeProductDialog()" class="flex-1 py-2.5 rounded-lg font-semibold text-gray-600 border border-gray-300">বাতিল</button>
+      <button onclick="saveProductFromDialog()" class="btn-primary flex-1">সেভ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CONFIRM DELETE MODAL (generic) ============ -->
+<div id="confirm-modal-overlay" class="modal-overlay">
+  <div class="modal-box">
+    <h3 class="font-bold text-[17px] mb-2" id="confirm-modal-title">মুছুন</h3>
+    <p class="text-sm text-gray-700" id="confirm-modal-message"></p>
+    <div class="flex gap-2 mt-4">
+      <button onclick="closeConfirmModal()" class="flex-1 py-2.5 rounded-lg font-semibold text-gray-600 border border-gray-300">না</button>
+      <button id="confirm-modal-action" class="flex-1 py-2.5 rounded-lg font-semibold text-white bg-red-600">মুছুন</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
